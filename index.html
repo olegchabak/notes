@@ -8,20 +8,26 @@
 <body>
 	<div id="app">
 		<h1>{{title}}</h1>
-		<div class="notes">
-			<div class="note"
+		<div class="new-note">
+			<input v-model="note.title" type="text" ref="input">
+			<textarea v-model="note.description" ref="textarea"></textarea>
+			<button @click.prevent="addNote">New note</button>
+		</div>
+		<ul class="notes">
+			<li class="note"
 			     v-for="(note, index) in notes"
 			     :key="index"
 			>
 				<div class="note__header">
 					<h4>{{note.title}}</h4>
 				</div>
-				<div class="note__body">
-					<p>{{note.description}}</p>
-					<p>{{note.date}}</p>
-				</div>
-			</div>
-		</div>
+				<p class="note__body">
+					<span>{{note.description}}</span>
+					<br>
+					<span>{{note.date}}</span>
+				</p>
+			</li>
+		</ul><!-- /.notes -->
 	</div>
 	<script>
 		var app = new Vue({
@@ -29,6 +35,11 @@
 			data(){
 				return {
 					title: 'Notes App',
+					note:{
+						title: '',
+						description: '',
+						date: new Date(Date.now()).toLocaleString()
+					},
 					notes: [
 						{
 							title: 'First Note',
@@ -45,12 +56,20 @@
 							description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, cumque dicta dignissimos ducimus enim est et in maiores minima, molestiae placeat recusandae reiciendis repudiandae, similique ullam vero vitae?',
 							date: new Date(Date.now()).toLocaleString()
 						},
-					]
+					],
 				}
 			},
 			props: {},
 			computed: {},
-			methods: {}
+			methods: {
+				addNote(){
+					let { title, description } =  this.note;
+					let date = new Date(Date.now()).toLocaleString();
+					this.notes.push( { title, description, date } );
+					this.note.title = '';
+					this.note.description = '';
+				}
+			}
 		});
 	</script>
 </body>
