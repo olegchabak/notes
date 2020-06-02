@@ -5,23 +5,9 @@
 			<section>
 				<div class="container">
 					<h1>{{title}}</h1>
+					<new-note @add-note="addNote" :note="note"/>
 					<message v-if="message" :message="message"/>
-					<newNote @addNote="addNote" :note="note"/>
-					<ul class="notes">
-						<li class="note"
-						    v-for="(note, index) in notes"
-						    :key="index"
-						>
-							<div class="note__header">
-								<h4>{{note.title}}</h4>
-							</div>
-							<p class="note__body">
-								<span>{{note.description}}</span>
-								<br>
-								<span>{{note.date}}</span>
-							</p>
-						</li>
-					</ul><!-- /.notes -->
+					<notes :notes="notes"/>
 				</div><!-- /.container -->
 
 			</section>
@@ -32,7 +18,8 @@
 
 <script>
 	import Message from '@/components/Message';
-	import newNote from '@/components/NewNote'
+	import NewNote from '@/components/NewNote';
+	import Notes from '@/components/Notes';
 
 	export default {
 		data(){
@@ -69,7 +56,7 @@
 			addNote(){
 				let { title, description } =  this.note;
 				if (!title || !description) {
-					this.message = 'There are empty fields!'
+					this.message = "Fields can't be blank!";
 					return
 				} else this.message = null
 				let date = new Date(Date.now()).toLocaleString();
@@ -79,9 +66,12 @@
 				this.note.description = '';
 			}
 		},
-		components: {Message, newNote}
+		components: {Message, NewNote, Notes}
 	}
 </script>
 
 <style>
+	h1{
+		font-size: 24px;
+	}
 </style>

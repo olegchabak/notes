@@ -10,7 +10,7 @@
 
 <script>
 	export default {
-		name: "newNote",
+		name: "new-note",
 		data(){
 			return {}
 		},
@@ -22,14 +22,19 @@
 		},
 		methods:{
 			addNote(){
-				this.$emit('addNote', this.note);
+				this.$emit('add-note', this.note);
 			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.new-note{
 		text-align: center;
+		margin-bottom: 30px;
+	}
+	input, textarea {
+		margin-bottom: 30px;
+		display: block;
 	}
 </style>

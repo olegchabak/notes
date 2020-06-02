@@ -19,5 +19,6 @@
 <style scoped>
 	.message{
 		color: red;
+		text-align: center;
 	}
 </style>
