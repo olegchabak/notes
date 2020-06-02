@@ -5,12 +5,8 @@
 			<section>
 				<div class="container">
 					<h1>{{title}}</h1>
-					<div class="new-note">
-						<input v-model="note.title" type="text" ref="input">
-						<textarea v-model="note.description" ref="textarea"></textarea>
-						<button @click.prevent="addNote">New note</button>
-						<p v-if="message" class="error-message">{{message}}</p>
-					</div>
+					<message v-if="message" :message="message"/>
+					<newNote @addNote="addNote" :note="note"/>
 					<ul class="notes">
 						<li class="note"
 						    v-for="(note, index) in notes"
@@ -35,6 +31,9 @@
 </template>
 
 <script>
+	import Message from '@/components/Message';
+	import newNote from '@/components/NewNote'
+
 	export default {
 		data(){
 			return {
@@ -70,15 +69,17 @@
 			addNote(){
 				let { title, description } =  this.note;
 				if (!title || !description) {
-					this.message = 'Have empty fields!'
+					this.message = 'There are empty fields!'
 					return
 				} else this.message = null
 				let date = new Date(Date.now()).toLocaleString();
+				this.$emit('addNote', this.note)
 				this.notes.push( { title, description, date } );
 				this.note.title = '';
 				this.note.description = '';
 			}
-		}
+		},
+		components: {Message, newNote}
 	}
 </script>
 
