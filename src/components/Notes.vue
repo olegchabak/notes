@@ -29,11 +29,6 @@
 			removeNote(index){
 				this.$emit('removeNote', index)
 			}
-		},
-		mounted() {
-			this.$on('removeNote', function (index) {
-				this.notes.splice(index, 1);
-			});
 		}
 	}
 </script>

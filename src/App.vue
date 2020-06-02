@@ -7,7 +7,7 @@
 					<h1>{{title}}</h1>
 					<new-note @add-note="addNote" :note="note"/>
 					<message v-if="message" :message="message"/>
-					<notes :notes="notes"/>
+					<notes :notes="notes" @removeNote="removeNote"/>
 				</div><!-- /.container -->
 
 			</section>
@@ -64,6 +64,9 @@
 				this.notes.push( { title, description, date } );
 				this.note.title = '';
 				this.note.description = '';
+			},
+			removeNote(index){
+				this.notes.splice(index, 1);
 			}
 		},
 		components: {Message, NewNote, Notes}
