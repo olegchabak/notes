@@ -6,6 +6,7 @@
 		>
 			<div class="note__header">
 				<h4>{{note.title}}</h4>
+				<a href="#" @click.prevent="removeNote(index)" class="note__remove">x</a>
 			</div>
 			<p class="note__body">
 				{{note.description}}
@@ -23,6 +24,16 @@
 				type: Array,
 				required: true
 			}
+		},
+		methods:{
+			removeNote(index){
+				this.$emit('removeNote', index)
+			}
+		},
+		mounted() {
+			this.$on('removeNote', function (index) {
+				this.notes.splice(index, 1);
+			});
 		}
 	}
 </script>
@@ -41,6 +52,8 @@
 		//border: 1px solid gray;
 		padding: 20px 40px;
 		&__header{
+			display: flex;
+			justify-content: space-between;
 			color: $primary-color;
 			font-size: 24px;
 			margin-bottom: 10px;
@@ -53,6 +66,12 @@
 			margin-top: 15px;
 			color: $neutral-secondary;
 			font-size: 14px;
+		}
+		&__remove{
+			color: $light-color;
+			&:hover{
+				color: $primary-color;
+			}
 		}
 	}
 </style>

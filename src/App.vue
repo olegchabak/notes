@@ -32,21 +32,21 @@
 					date: new Date(Date.now()).toLocaleString()
 				},
 				notes: [
-					// {
-					// 	title: 'First Note',
-					// 	description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores, enim eveniet fugit ipsum nobis possimus quas quod tenetur?',
-					// 	date: new Date(Date.now()).toLocaleString()
-					// },
-					// {
-					// 	title: 'Second Note',
-					// 	description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-					// 	date: new Date(Date.now()).toLocaleString()
-					// },
-					// {
-					// 	title: 'Third Note',
-					// 	description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, cumque dicta dignissimos ducimus enim est et in maiores minima, molestiae placeat recusandae reiciendis repudiandae, similique ullam vero vitae?',
-					// 	date: new Date(Date.now()).toLocaleString()
-					// },
+					{
+						title: 'First Note',
+						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores, enim eveniet fugit ipsum nobis possimus quas quod tenetur?',
+						date: new Date(Date.now()).toLocaleString()
+					},
+					{
+						title: 'Second Note',
+						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
+						date: new Date(Date.now()).toLocaleString()
+					},
+					{
+						title: 'Third Note',
+						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, cumque dicta dignissimos ducimus enim est et in maiores minima, molestiae placeat recusandae reiciendis repudiandae, similique ullam vero vitae?',
+						date: new Date(Date.now()).toLocaleString()
+					},
 				],
 			}
 		},
