@@ -34,7 +34,7 @@
 		margin-bottom: 30px;
 	}
 	input, textarea {
-		margin-bottom: 30px;
 		display: block;
+		margin-bottom: 30px;
 	}
 </style>

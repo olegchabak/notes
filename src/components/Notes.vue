@@ -1,17 +1,20 @@
 <template>
-	<ul class="notes">
+	<ul class="notes" :class="{'notes--column':!grid}">
 		<li class="note"
+		    :class="{'note--full':!grid}"
 		    v-for="(note, index) in notes"
 		    :key="index"
 		>
-			<div class="note__header">
-				<h4>{{note.title}}</h4>
-				<a href="#" @click.prevent="removeNote(index)" class="note__remove">x</a>
+			<div class="note__inner">
+				<div class="note__header">
+					<h4>{{note.title}}</h4>
+					<a href="#" @click.prevent="removeNote(index)" class="note__remove remove">x</a>
+				</div>
+				<p class="note__body">
+					{{note.description}}
+					<span class="note__date">{{note.date}}</span>
+				</p>
 			</div>
-			<p class="note__body">
-				{{note.description}}
-				<span class="note__date">{{note.date}}</span>
-			</p>
 		</li>
 	</ul><!-- /.notes -->
 </template>
@@ -22,6 +25,10 @@
 		props:{
 			notes: {
 				type: Array,
+				required: true
+			},
+			grid: {
+				type: Boolean,
 				required: true
 			}
 		},
@@ -41,11 +48,26 @@
 		flex-wrap: wrap;
 		justify-content: space-between;
 		margin: 0 -40px;
+		&--column{
+			flex-direction: column;
+		}
 	}
 	.note{
 		flex-basis: 50%;
 		//border: 1px solid gray;
 		padding: 20px 40px;
+		&__inner{
+			border: 1px solid #DCDFE6;
+			border-radius: 14px;
+			padding: 20px 40px;
+			height: 100%;
+			transition: transform .25s ease, border-color .25s ease;
+			&:hover{
+				border-color: $primary-color;
+				transform: translateY(-3px);
+				box-shadow: 0 3px 3px rgba($light-color, .3);
+			}
+		}
 		&__header{
 			display: flex;
 			justify-content: space-between;
@@ -62,10 +84,13 @@
 			color: $neutral-secondary;
 			font-size: 14px;
 		}
-		&__remove{
-			color: $light-color;
-			&:hover{
-				color: $primary-color;
+		&--full{
+			text-align: center;
+			.note__inner{
+				border-radius: 20px;
+			}
+			.note__header h4{
+				flex-grow: 1;
 			}
 		}
 	}
