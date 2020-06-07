@@ -16,9 +16,10 @@
 	}
 </script>
 
-<style scoped>
+<style lang="scss">
+	@import "@/assets/scss/utils/vars.scss";
 	.message{
-		color: red;
+		color: $danger-color;
 		text-align: center;
 	}
 </style>

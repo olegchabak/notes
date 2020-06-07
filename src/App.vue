@@ -8,6 +8,11 @@
 					<new-note @add-note="addNote" :note="note"/>
 					<message v-if="message" :message="message"/>
 					<div class="control" v-if="notes.length>0">
+						<search v-if="notes.length>0"
+						        :value="search"
+						        placeholder="Find your note"
+						        @search="search=$event"
+						/>
 						<a href="#"
 						   @click.prevent="grid = true"
 						   class="control__btn"
@@ -24,7 +29,7 @@
 						</a>
 						<a href="#" @click.prevent="notes=[]" class="contol__link remove">Remove all notes</a>
 					</div>
-					<notes :notes="notes" @removeNote="removeNote" :grid="grid"/>
+					<notes :notes="filteredNotes" @removeNote="removeNote" :grid="grid"/>
 				</div><!-- /.container -->
 
 			</section>
@@ -34,8 +39,9 @@
 </template>
 
 <script>
-	import Message from '@/components/Message';
 	import NewNote from '@/components/NewNote';
+	import Message from '@/components/Message';
+	import Search from '@/components/Search';
 	import Notes from '@/components/Notes';
 
 	export default {
@@ -44,6 +50,7 @@
 				title: 'Notes App',
 				message: null,
 				grid: true,
+				search: '',
 				note: {
 					title: '',
 					description: '',
@@ -69,7 +76,26 @@
 			}
 		},
 		props: {},
-		computed: {},
+		computed: {
+			filteredNotes(){
+				let arr = this.notes,
+					search = this.search;
+
+				if (!search) return arr;
+
+				search = search.trim().toLowerCase();
+
+				arr = arr.filter(
+					(item)=>{
+						return item.title
+							.trim()
+							.toLowerCase()
+							.indexOf( search ) !== -1 ;
+					}
+				)
+				return arr;
+			}
+		},
 		methods: {
 			addNote() {
 				let {title, description} = this.note;
@@ -78,16 +104,15 @@
 					return
 				} else this.message = null
 				let date = new Date(Date.now()).toLocaleString();
-				this.$emit('addNote', this.note)
 				this.notes.push({title, description, date});
 				this.note.title = '';
 				this.note.description = '';
 			},
 			removeNote(index) {
 				this.notes.splice(index, 1);
-			}
+			},
 		},
-		components: {Message, NewNote, Notes}
+		components: {Message, NewNote, Notes, Search},
 	}
 </script>
 
@@ -106,6 +131,7 @@
 		&__btn{
 			border: 2px solid $light-color;
 			padding: 3px;
+			border-radius: 6px;
 		}
 		&__link, &__btn {
 			color: $light-color;
@@ -123,7 +149,7 @@
 	.remove {
 		color: $light-color;
 		&:hover {
-			color: $primary-color;
+			color: $danger-color;
 		}
 	}
 </style>

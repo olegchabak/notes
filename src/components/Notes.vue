@@ -63,7 +63,7 @@
 			height: 100%;
 			transition: transform .25s ease, border-color .25s ease;
 			&:hover{
-				border-color: $primary-color;
+				border-color: rgba($primary-color, .5);
 				transform: translateY(-3px);
 				box-shadow: 0 3px 3px rgba($light-color, .3);
 			}
@@ -83,6 +83,10 @@
 			margin-top: 15px;
 			color: $neutral-secondary;
 			font-size: 14px;
+		}
+		&__remove{
+			padding: 0 10px;
+			margin-right: -20px;
 		}
 		&--full{
 			text-align: center;
