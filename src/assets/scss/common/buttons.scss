@@ -5,6 +5,15 @@
   text-transform: uppercase;
   cursor: pointer;
   border-radius: 30px;
+  transition: transform .2s ease, box-shadow .2s ease;
+  &:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px $neutral-secondary;
+  }
+  &:active{
+    transform: translateY(0);
+    box-shadow: 0 0 0 transparent;
+  }
 
   // default btn
   &.btnDefaul {
@@ -16,8 +25,8 @@
   // primiry btn
   &.btnPrimary {
     color: #ffffff;
-    border: 1px solid #494ce8;
-    background-color: #494ce8;
+    border: 1px solid $primary-color;
+    background-color: $primary-color;
   }
 
   // danger btn
@@ -31,5 +40,10 @@
     color: #333333;
     border: 1px solid #ffffff;
     background-color: #ffffff;
+  }
+  &.btnSmall {
+    padding: .4em 3em;
+    line-height: 1;
+    border-radius: 15px;
   }
 }

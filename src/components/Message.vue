@@ -21,5 +21,6 @@
 	.message{
 		color: $danger-color;
 		text-align: center;
+		margin-bottom: 30px;
 	}
 </style>

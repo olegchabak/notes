@@ -29,7 +29,7 @@
 						</a>
 						<a href="#" @click.prevent="notes=[]" class="contol__link remove">Remove all notes</a>
 					</div>
-					<notes :notes="filteredNotes" @removeNote="removeNote" :grid="grid"/>
+					<notes :notes="filteredNotes" @removeNote="removeNote" @editNote="editNote" @undoChanges="undoChanges" :grid="grid"/>
 				</div><!-- /.container -->
 
 			</section>
@@ -52,25 +52,38 @@
 				grid: true,
 				search: '',
 				note: {
+					id: null,
 					title: '',
+					importance: 0,
 					description: '',
-					date: new Date(Date.now()).toLocaleString()
+					date: new Date(Date.now()).toLocaleString(),
+					editMode: false
 				},
+				beforeEditingNote: null,
 				notes: [
 					{
+						id: 1,
+						importance: 0,
 						title: 'First Note',
 						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores, enim eveniet fugit ipsum nobis possimus quas quod tenetur?',
-						date: new Date(Date.now()).toLocaleString()
+						date: new Date(Date.now()).toLocaleString(),
+						editMode: false
 					},
 					{
+						id: 2,
+						importance: 1,
 						title: 'Second Note',
 						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-						date: new Date(Date.now()).toLocaleString()
+						date: new Date(Date.now()).toLocaleString(),
+						editMode: false
 					},
 					{
+						id: 3,
+						importance: 2,
 						title: 'Third Note',
 						description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur, cumque dicta dignissimos ducimus enim est et in maiores minima, molestiae placeat recusandae reiciendis repudiandae, similique ullam vero vitae?',
-						date: new Date(Date.now()).toLocaleString()
+						date: new Date(Date.now()).toLocaleString(),
+						editMode: false
 					},
 				],
 			}
@@ -98,21 +111,70 @@
 		},
 		methods: {
 			addNote() {
-				let {title, description} = this.note;
+				let {title, description, importance} = this.note;
 				if (!title || !description) {
 					this.message = "Fields can't be blank!";
 					return
 				} else this.message = null
+				// массив уже отсортирован по убыванию
+				let id = this.notes.length ? this.notes[0].id + 1 : 1;
 				let date = new Date(Date.now()).toLocaleString();
-				this.notes.push({title, description, date});
+				this.notes.push({id, title, importance, description, date, editMode: false});
+				// сортируем по id, чтоб новые были вначале
+				this.notes.sort((a, b) => a.id < b.id ? 1 : -1);
 				this.note.title = '';
+				this.note.importance = 0;
 				this.note.description = '';
 			},
-			removeNote(index) {
-				this.notes.splice(index, 1);
+			removeNote(id) {
+				const index = this.notes.findIndex(n => n.id === id);
+				if (index !== -1) {
+					this.notes.splice(index, 1);
+				}
 			},
+			editNote(id) {
+				// проверка на случай уже открытого редактирования
+				// пройдется по массиву, сбросит и закроет редактируемый
+				if (this.beforeEditingNote){
+					this.notes.forEach((note)=>{
+						if (note.editMode) {
+							note.title = this.beforeEditingNote.title;
+							note.importance = this.beforeEditingNote.importance;
+							note.description = this.beforeEditingNote.description;
+							note.date = this.beforeEditingNote.date;
+							note.editMode = false;
+						}
+					});
+				}
+				// определяем нужный нот
+				const index = this.notes.findIndex(n => n.id === id);
+				if (index !== -1) {
+					// и сохраняем значение на случай отмены
+					this.beforeEditingNote = {
+						id: this.notes[index].id,
+						title: this.notes[index].title,
+						importance: this.notes[index].importance,
+						description: this.notes[index].description,
+						date: this.notes[index].date,
+						editMode: false
+					};
+					// включаем у нота режим редактирования
+					this.notes[index].editMode = true;
+				}
+			},
+			undoChanges(id){
+				const index = this.notes.findIndex(n => n.id === id);
+				if (index !== -1) {
+					this.notes.splice(index, 1, this.beforeEditingNote)
+					this.beforeEditingNote = null;
+				}
+			}
 		},
 		components: {Message, NewNote, Notes, Search},
+		created() {
+			// сортируем по id, чтоб новые были вначале
+			this.notes.sort((a, b) => a.id < b.id ? 1 : -1);
+		}
 	}
 </script>
 
@@ -120,7 +182,10 @@
 	@import "@/assets/scss/utils/vars.scss";
 
 	h1 {
-		font-size: 24px;
+		font-size: 28px;
+		font-weight: 900;
+		color: $primary-color;
+		margin-bottom: 36px;
 	}
 
 	.control {
