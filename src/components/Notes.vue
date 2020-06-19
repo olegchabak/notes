@@ -7,7 +7,7 @@
 		    @dblclick="editNote(note.id)"
 		    @keyup.esc="undoChanges(note.id)"
 		>
-			<div class="note__inner" :class="{'note__inner--edit': note.editMode}">
+			<div class="note__inner" :class="{'note__inner--edit': note.editMode}" v-click-outside="outsideHandler">
 				<div class="note__header">
 					<img src="../assets/img/alert.svg" alt="Important note" class="note__header-icon" v-if="+note.importance === 1 && !note.editMode">
 					<img src="../assets/img/fire.svg" alt="Highly important note" class="note__header-icon" v-if="+note.importance === 2 && !note.editMode">
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+	import ClickOutside from "vue-click-outside";
+
 	export default {
 		name: "notes",
 		props:{
@@ -74,12 +76,32 @@
 					this.notes[index].editMode = false;
 					this.notes[index].date = new Date(Date.now()).toLocaleString();
 				}
-
-
 			},
 			undoChanges(id){
 				this.$emit('undoChanges', id);
+			},
+			outsideHandler(){
+				// проверка на случай уже открытого редактирования
+				// пройдется по массиву, сбросит и закроет редактируемый
+				if (this.$parent.beforeEditingNote){
+					this.notes.forEach((note)=>{
+						if (note.editMode) {
+							note.title = this.$parent.beforeEditingNote.title;
+							note.importance = this.$parent.beforeEditingNote.importance;
+							note.description = this.$parent.beforeEditingNote.description;
+							note.date = this.$parent.beforeEditingNote.date;
+							note.editMode = false;
+						}
+					});
+				}
 			}
+		},
+		mounted () {
+			// prevent click outside event with popupItem.
+			this.popupItem = this.$el
+		},
+		directives: {
+			ClickOutside
 		}
 	}
 </script>
